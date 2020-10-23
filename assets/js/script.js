@@ -2,6 +2,10 @@ var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 var taskIdCounter = 0;
 var pageContentEl = document.querySelector("#page-content");
+var taskInProgressEl = document.querySelector("#task-in-progress");
+var taskCompletedEl = document.querySelector("#task-completed");
+
+
 
 var taskFormHandler = function(event) {
     event.preventDefault();
@@ -17,15 +21,46 @@ var taskFormHandler = function(event) {
     
     formEl.reset();
 
+    var isEdit = formEl.hasAttribute("data-task-id");
+    //console.log(isEdit);
+    //has data attribute, so get task id and call function to complete edit process
+    if (isEdit) {
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    }
+    //if no attribute, so create oject as normal and pass to createTaskEl function
+    else {
+        var taskDataObj = {
+            name: taskNameInput,
+            type: taskTypeInput
+        };
+        createTaskEl(taskDataObj);
+    }
+
     //package up data as an object
-    var taskDataObj = {
-        name: taskNameInput,
-        type: taskTypeInput
-    };
+    //var taskDataObj = {
+        //name: taskNameInput,
+        //type: taskTypeInput
+    //};
 
     //send it as an argument to createTaskEl
-    createTaskEl(taskDataObj);
+    //createTaskEl(taskDataObj);
 }
+
+var completeEditTask = function(taskName, taskType, taskId) {
+    //console.log(taskName, taskType, taskId);
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    //set new values
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated");
+
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
+}
+
 
 var createTaskEl = function(taskDataObj) {
     //create list item
@@ -137,7 +172,7 @@ var editTask = function(taskId) {
      document.querySelector("#save-task").textContent = "Save Task";
 
      formEl.setAttribute("data-task-id", taskId);
-     
+
 };
 
    
