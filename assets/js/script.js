@@ -314,20 +314,54 @@ var dragLeaveHandler = function(event) {
 
 var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    console.log("tasks saved")
 }
 
+var loadTask = function () {
+    // get task items from localStorage
+    var savedTasks = localStorage.getItem("tasks");
+    // console.log("saved task found!")
+    // if there are no tasks, set tasks to an empty array and return out of the function
+    if (!savedTasks) {
+        // tasks = [];
+        return false;
+    }
+
+    savedTasks = JSON.parse(savedTasks);
+    // console.log(tasks)
+    // loop throgh savedTask array
+    for (var i = 0; i < tasks.length; i++) {
+        // pass each task object into the `createTaskEl()` function
+        createTaskEl(savedTasks[i]);
+    }
+}    
+    // convert tasks from the string format back into an array of objects
+    // iterates through a task array & creates task elements on the page from it
+//      {
+//         console.log(tasks[i]);
+//         task[i] = taskIdCounter;
+//             console.log(tasks[i]);
+//         var listItemEl = document.createElement("li");
+//         listItemEl.className = "task-item";
+//         listItemEl.setAttribute("data-task-id", task[i].id);
+//         listItemEl.setAttribute("draggable", ture);
+//         console.log(listItemEl);
+//     }
+// }
+
+// for edit and delete buttons
 pageContentEl.addEventListener("click", taskButtonHandler);
 
+// for changing the status
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
-  
+
+// for dragging 
 pageContentEl.addEventListener("dragstart", dragTaskHandler);
-
 pageContentEl.addEventListener("dragover", dropZoneDragHandler);
-
 pageContentEl.addEventListener("drop", dropTaskHandler);
-
 pageContentEl.addEventListener("dragleave", dragLeaveHandler);
 
+loadTask();
 
     //var listItemEl = document.createElement("li");
     //listItemEl.className = "task-item";
